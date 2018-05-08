@@ -328,9 +328,16 @@ defmodule Ecto.Adapters.MySQL do
         []
       end
 
+    ssl =
+      if opts[:ssl] do
+        ["--ssl"]
+      else
+        []
+      end
+
     host = opts[:hostname] || System.get_env("MYSQL_HOST") || "localhost"
     port = opts[:port] || System.get_env("MYSQL_TCP_PORT") || "3306"
-    args = ["--user", opts[:username], "--host", host, "--port", to_string(port), "--protocol=tcp"] ++ opt_args
+    args = ["--user", opts[:username], "--host", host, "--port", to_string(port), "--protocol=tcp"] ++ ssl ++ opt_args
     System.cmd(cmd, args, env: env, stderr_to_stdout: true)
   end
 end
